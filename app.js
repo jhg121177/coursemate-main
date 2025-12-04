@@ -3,13 +3,6 @@ const mariadb = require('mariadb');
 const cors = require('cors');
 require('dotenv').config();
 
-const authRoutes = require('./routes/authRoutes');
-const placeRoutes = require('./routes/placeRoutes');
-const reviewRoutes = require('./routes/reviewRoutes');
-const userRoutes = require('./routes/userRoutes');
-const recommendationRoutes = require('./routes/recommendationRoutes');
-const communityRoutes = require('./routes/communityRoutes');
-const adminRoutes = require('./routes/adminRoutes');
 const jhgRoutes = require('./routes/jhg_routes');
 
 const app = express();
@@ -48,42 +41,13 @@ testDbConnection();
 
 // 기본 접속 테스트용 API
 app.get('/', (req, res) => {
-  res.send('CourseMate 백엔드 서버가 정상 작동 중입니다.');
+  res.send('CourseMate 백엔드 서버가 정상 작동 중입니다 (JHG 독자 실행 버전).');
 });
+
+// [수정됨] 라우트 연결 설정 (다른 라우트 app.use 삭제함)
+app.use('/api/jhg', jhgRoutes);
 
 // 서버 시작
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
 });
-
-
-// 라우트 설정
-app.use('/api/auth', authRoutes);
-
-app.get('/', (req, res) => {
-  res.send('CourseMate 백엔드 서버가 정상 작동 중입니다.');
-});
-
-app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
-});
-
-app.use('/api/places', placeRoutes);
-
-//리뷰 라우터
-app.use('/api', reviewRoutes);
-// 이렇게 하면 '/api/places/:id/reviews' 와 '/api/reviews/:reviewId' 모두 reviewRoutes 안에서 처리
-
-//사용자 라우터
-app.use('/api/users', userRoutes);
-
-//추천 라우터
-app.use('/api/recommendations', recommendationRoutes);
-
-//커뮤니티 라우터
-app.use('/api/community', communityRoutes);
-
-//관리자 라우터
-app.use('/api/admin', adminRoutes);
-
-app.use('/api/jhg', jhgRoutes)
